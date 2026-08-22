@@ -130,4 +130,30 @@ if (guestForm) {
       }
     }
   });
+}// Фоновая музыка
+const musicToggle = document.getElementById('musicToggle');
+const bgMusic = document.getElementById('bgMusic');
+
+if (musicToggle && bgMusic) {
+  bgMusic.volume = 0.28;
+
+  musicToggle.addEventListener('click', async () => {
+    try {
+      if (bgMusic.paused) {
+        await bgMusic.play();
+        musicToggle.classList.add('is-playing');
+        musicToggle.setAttribute('aria-pressed', 'true');
+        musicToggle.setAttribute('aria-label', 'Выключить музыку');
+        musicToggle.textContent = '❚❚';
+      } else {
+        bgMusic.pause();
+        musicToggle.classList.remove('is-playing');
+        musicToggle.setAttribute('aria-pressed', 'false');
+        musicToggle.setAttribute('aria-label', 'Включить музыку');
+        musicToggle.textContent = '♫';
+      }
+    } catch (err) {
+      console.log('Музыка не запустилась', err);
+    }
+  });
 }
