@@ -41,3 +41,39 @@
   .welcome .signature{font-size:3.15rem;margin-top:30px}
   .swatches{gap:10px}.swatches span{width:52px;height:52px}
 }
+/* Правки главной страницы */
+
+/* Больше воздуха между именами */
+.hero-and {
+  margin: .30em 0 .28em;
+}
+
+/* Текст на бордовом фоне строго по центру */
+.hero-lower {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-lower .hero-date,
+.hero-lower .hero-heart-line,
+.hero-lower .hero-copy {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Имена в блоке «Дорогие гости» меньше */
+.welcome .signature {
+  font-size: clamp(2.15rem, 4.4vw, 4.1rem);
+}
+
+@media (max-width: 760px) {
+  .welcome .signature {
+    font-size: 2.55rem;
+  }
+}
