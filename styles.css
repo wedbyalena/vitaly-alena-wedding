@@ -99,62 +99,42 @@
     text-align: center !important;
   }
 }/* ТОЧНАЯ ЦЕНТРОВКА даты, сердечка и текста на бордовой ткани */
+/* FIX HERO LOWER — не даём анимации сбивать центрирование */
+.hero-lower.reveal,
+.hero-lower.reveal.is-visible {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: 86vw !important;
+  max-width: 680px !important;
+  text-align: center !important;
+}
+
+.hero-lower .hero-date,
+.hero-lower .hero-heart-line,
+.hero-lower .hero-copy {
+  position: static !important;
+  transform: none !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
 @media (max-width: 768px) {
-
-  .hero-content {
-    position: static !important;
+  .hero-lower.reveal,
+  .hero-lower.reveal.is-visible {
+    bottom: 7svh !important;
+    width: 88vw !important;
   }
 
-  .hero-date {
-    position: absolute !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: 18% !important;
-
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 24px !important;
-
-    transform: translateX(-50%) !important;
-    text-align: center !important;
-
-    color: white !important;
-    z-index: 5 !important;
-  }
-
-  .hero-heart-line {
-    position: absolute !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: 13.5% !important;
-
+  .hero-lower .hero-heart-line {
     width: 58% !important;
-    margin: 0 !important;
-
-    transform: translateX(-50%) !important;
-    color: white !important;
-    z-index: 5 !important;
   }
 
-  .hero-heart-line i {
-    background: rgba(255,255,255,.65) !important;
-  }
-
-  .hero-copy {
-    position: absolute !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: 7% !important;
-
-    width: 100% !important;
-    max-width: 360px !important;
-    margin: 0 !important;
-    padding: 0 24px !important;
-
-    transform: translateX(-50%) !important;
-    text-align: center !important;
-
-    color: white !important;
-    z-index: 5 !important;
+  .hero-lower .hero-copy {
+    max-width: 330px !important;
   }
 }
