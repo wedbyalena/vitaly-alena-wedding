@@ -1,60 +1,133 @@
-const weddingDate = new Date('2026-11-07T16:00:00+07:00');
-const GOOGLE_SCRIPT_URL = ''; // Вставим URL веб-приложения Google Apps Script после подключения таблицы.
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFYJP0UmFrNY6yfdHtPtaS3Y7iFTaPhJcPPImi8iXDn_MdMdOpGyOOBaj972U5RH1S/exec';
 
-const pad = n => String(n).padStart(2,'0');
-function updateCountdown(){
-  const diff = weddingDate - new Date();
-  if(diff <= 0){
-    document.getElementById('countdown').innerHTML = '<div style="grid-column:1/-1"><strong>Сегодня!</strong><span>Наш день настал</span></div>';
+const weddingDate = new Date('2026-11-07T16:00:00+07:00');
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = weddingDate - now;
+
+  const daysEl = document.getElementById('days');
+  const hoursEl = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
+
+  if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+  if (diff <= 0) {
+    daysEl.textContent = '0';
+    hoursEl.textContent = '0';
+    minutesEl.textContent = '0';
+    secondsEl.textContent = '0';
     return;
   }
-  const days = Math.floor(diff/86400000);
-  const hours = Math.floor(diff/3600000)%24;
-  const minutes = Math.floor(diff/60000)%60;
-  const seconds = Math.floor(diff/1000)%60;
-  document.getElementById('days').textContent = days;
-  document.getElementById('hours').textContent = pad(hours);
-  document.getElementById('minutes').textContent = pad(minutes);
-  document.getElementById('seconds').textContent = pad(seconds);
-}
-updateCountdown();setInterval(updateCountdown,1000);
 
-const io = new IntersectionObserver(entries => entries.forEach(e => {if(e.isIntersecting)e.target.classList.add('is-visible')}),{threshold:.14});
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  daysEl.textContent = days;
+  hoursEl.textContent = String(hours).padStart(2, '0');
+  minutesEl.textContent = String(minutes).padStart(2, '0');
+  secondsEl.textContent = String(seconds).padStart(2, '0');
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+const revealElements = document.querySelectorAll('.reveal');
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  revealElements.forEach((el) => observer.observe(el));
+} else {
+  revealElements.forEach((el) => el.classList.add('is-visible'));
+}
 
 const toTop = document.getElementById('toTop');
-window.addEventListener('scroll',()=>toTop.classList.toggle('show',scrollY>700),{passive:true});
-toTop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 
-const form = document.getElementById('guestForm');
-const status = document.getElementById('formStatus');
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  if(!form.reportValidity()) return;
-  const fd = new FormData(form);
-  const data = {
-    name: fd.get('name'),
-    guests: fd.get('guests'),
-    alcohol: fd.getAll('alcohol').join(', ') || 'Не указано',
-    attendance: fd.get('attendance'),
-    submittedAt: new Date().toLocaleString('ru-RU')
-  };
-  const button = form.querySelector('button[type=submit]');
-  button.disabled = true;
-  button.textContent = 'Отправляем…';
-  try{
-    if(!GOOGLE_SCRIPT_URL){
-      localStorage.setItem('wedding-rsvp-preview', JSON.stringify(data));
-      status.textContent = 'Анкета готова. Для финальной отправки осталось подключить Google Таблицу.';
-    } else {
-      await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
-      status.textContent = 'Спасибо! Ваш ответ отправлен.';
-      form.reset();
-    }
-  }catch(err){
-    status.textContent = 'Не удалось отправить ответ. Попробуйте ещё раз чуть позже.';
-  }finally{
-    button.disabled = false;
-    button.textContent = 'Отправить ответ';
-  }
+window.addEventListener('scroll', () => {
+  if (!toTop) return;
+  toTop.classList.toggle('show', window.scrollY > 500);
 });
+
+if (toTop) {
+  toTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+const guestForm = document.getElementById('guestForm');
+const formStatus = document.getElementById('formStatus');
+
+if (guestForm) {
+  guestForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!guestForm.reportValidity()) return;
+
+    const submitButton = guestForm.querySelector('button[type="submit"]');
+
+    const formData = new FormData(guestForm);
+
+    const alcohol = Array.from(
+      guestForm.querySelectorAll('input[name="alcohol"]:checked')
+    ).map((input) => input.value);
+
+    const payload = {
+      name: formData.get('name'),
+      guests: formData.get('guests'),
+      alcohol: alcohol.join(', '),
+      attendance: formData.get('attendance')
+    };
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Отправляем...';
+    }
+
+    if (formStatus) {
+      formStatus.textContent = '';
+    }
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (formStatus) {
+        formStatus.textContent = 'Спасибо! Ваш ответ отправлен ❤️';
+      }
+
+      guestForm.reset();
+    } catch (error) {
+      console.error(error);
+
+      if (formStatus) {
+        formStatus.textContent =
+          'Не удалось отправить ответ. Пожалуйста, попробуйте ещё раз.';
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Отправить ответ';
+      }
+    }
+  });
+}
