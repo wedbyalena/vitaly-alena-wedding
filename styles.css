@@ -173,8 +173,8 @@
 }
 /* «Ваша задача — наслаждаться» */
 .details .section-subtitle {
-  font-size: 1.4rem !important;
-  line-height: 1.2 !important;
+  font-size: 18px !important;
+  line-height: 1.25 !important;
   white-space: nowrap !important;
-  margin-bottom: 28px !important;
+  margin-bottom: 24px !important;
 }
