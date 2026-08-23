@@ -177,4 +177,10 @@
   line-height: 1.25 !important;
   white-space: nowrap !important;
   margin-bottom: 24px !important;
+}/* Анкета гостя */
+.rsvp > .section-inner > .eyebrow.wine {
+  font-size: 1.05rem !important;
+  letter-spacing: .22em !important;
+  margin-top: 55px !important;
+  margin-bottom: 24px !important;
 }
