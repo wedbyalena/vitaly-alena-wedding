@@ -138,7 +138,7 @@
     max-width: 330px !important;
   }
   } 
-}/* ЕДИНАЯ ТИПОГРАФИКА ГЛАВНЫХ ЗАГОЛОВКОВ */
+/* ЕДИНАЯ ТИПОГРАФИКА ГЛАВНЫХ ЗАГОЛОВКОВ */
 .section-heading {
   font-family: Georgia, 'Times New Roman', serif !important;
   font-size: clamp(2.25rem, 5vw, 4.5rem) !important;
