@@ -173,5 +173,5 @@
 }
 /* «Ваша задача — наслаждаться» крупнее */
 .details .section-subtitle {
-  font-size: clamp(2.3rem, 5vw, 4.1rem) !important;
+  font-size: clamp(1.9rem, 4vw, 3.3rem) !important;
 }
