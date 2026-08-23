@@ -137,6 +137,7 @@
   .hero-lower .hero-copy {
     max-width: 330px !important;
   }
+  } 
 }/* ЕДИНАЯ ТИПОГРАФИКА ГЛАВНЫХ ЗАГОЛОВКОВ */
 .section-heading {
   font-family: Georgia, 'Times New Roman', serif !important;
@@ -170,7 +171,6 @@
   text-transform: none !important;
   margin: 0 0 28px !important;
 }
-
 /* «Ваша задача — наслаждаться» крупнее */
 .details .section-subtitle {
   font-size: clamp(2.3rem, 5vw, 4.1rem) !important;
