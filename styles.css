@@ -169,4 +169,7 @@
   letter-spacing: 0 !important;
   text-transform: none !important;
   margin: 0 0 28px !important;
+}/* «Ваша задача — наслаждаться» чуть крупнее */
+.details .section-subtitle {
+  font-size: clamp(1.5rem, 3.2vw, 2.8rem) !important;
 }
